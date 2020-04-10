@@ -32,6 +32,10 @@ def cityreader(cities=[]):
   # For each city record, create a new City instance and add it to the 
   # `cities` list
 
+  """
+  https://developer.rhino3d.com/guides/rhinopython/python-csv-file/
+  """
+
   with open('cities.csv', newline='') as file:
     reader = csv.reader(file, delimiter=',')
     next(reader)
@@ -80,12 +84,31 @@ for c in cities:
 
 # TODO Get latitude and longitude values from the user
 
+# print("Enter two pairs of latitude, longitude values (comma-separated): ")
+
+# coord1 = input("Enter the lat1,lon1: ").split(',')
+# coord2 = input("Enter the lat2,lon2: ").split(',')
+
 def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
   # within will hold the cities that fall within the specified region
   within = []
 
-  # TODO Ensure that the lat and lon valuse are all floats
+  # TODO Ensure that the lat and lon values are all floats
   # Go through each city and check to see if it falls within 
   # the specified coordinates.
 
+  lat_boyz = [float(lat1), float(lat2)]
+  lon_boyz = [float(lon1), float(lon2)]
+  lat_boyz.sort()
+  lon_boyz.sort()
+
+  for city in cities:
+    if lat_boyz[0] <= float(city.lat) <= lat_boyz[1] and lon_boyz[0] <= float(city.lon) <= lon_boyz[1]:
+      within.append(city)
+
   return within
+
+print("\n *** Stretch Goal Answer Below: *** \n")
+
+for city in cityreader_stretch(45, -100, 32, -120, cities):
+  print(f"{city.name}: {city.lat}, {city.lon}")
