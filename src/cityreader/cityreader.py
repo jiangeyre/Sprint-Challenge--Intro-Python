@@ -1,6 +1,14 @@
 # Create a class to hold a city location. Call the class "City". It should have
 # fields for name, lat and lon (representing latitude and longitude).
 
+class City:
+  def __init__(self, name, lat, lon):
+    self.name = name
+    self.lat = lat
+    self.lon = lon
+
+  def __str__(self):
+    return f"{self.name}: {self.lat}, {self.lon}"
 
 # We have a collection of US cities with population over 750,000 stored in the
 # file "cities.csv". (CSV stands for "comma-separated values".)
@@ -14,20 +22,36 @@
 #
 # Note that the first line of the CSV is header that describes the fields--this
 # should not be loaded into a City object.
+
+import csv
+
 cities = []
 
 def cityreader(cities=[]):
   # TODO Implement the functionality to read from the 'cities.csv' file
   # For each city record, create a new City instance and add it to the 
   # `cities` list
-    
+
+  """
+  https://developer.rhino3d.com/guides/rhinopython/python-csv-file/
+  """
+
+  with open('cities.csv', newline='') as file:
+    reader = csv.reader(file, delimiter=',')
+    next(reader)
+
+    for row in reader:
+      cities.append(City(row[0], float(row[3]), float(row[4])))
+
     return cities
 
 cityreader(cities)
 
 # Print the list of cities (name, lat, lon), 1 record per line.
+
 for c in cities:
     print(c)
+
 
 # STRETCH GOAL!
 #
@@ -60,12 +84,31 @@ for c in cities:
 
 # TODO Get latitude and longitude values from the user
 
+# print("Enter two pairs of latitude, longitude values (comma-separated): ")
+
+# coord1 = input("Enter the lat1,lon1: ").split(',')
+# coord2 = input("Enter the lat2,lon2: ").split(',')
+
 def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
   # within will hold the cities that fall within the specified region
   within = []
 
-  # TODO Ensure that the lat and lon valuse are all floats
+  # TODO Ensure that the lat and lon values are all floats
   # Go through each city and check to see if it falls within 
   # the specified coordinates.
 
+  lat_boyz = [float(lat1), float(lat2)]
+  lon_boyz = [float(lon1), float(lon2)]
+  lat_boyz.sort()
+  lon_boyz.sort()
+
+  for city in cities:
+    if lat_boyz[0] <= float(city.lat) <= lat_boyz[1] and lon_boyz[0] <= float(city.lon) <= lon_boyz[1]:
+      within.append(city)
+
   return within
+
+print("\n *** Stretch Goal Answer Below: *** \n")
+
+for city in cityreader_stretch(45, -100, 32, -120, cities):
+  print(f"{city.name}: {city.lat}, {city.lon}")
